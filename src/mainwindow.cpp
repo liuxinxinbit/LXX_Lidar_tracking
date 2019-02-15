@@ -6,10 +6,10 @@
 #include <qfiledialog.h>
 #include <qdir.h>
 #include <QVTKWidget.h>
-
+#include <QDesktopWidget>
 int user_data;
 #define Pi 3.14159265
-int pool_size=10;
+unsigned int pool_size=10;
 float boat_heading=0;
 float boat_velocity=0;
 float target_radius_limit = 20;
@@ -30,7 +30,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+    this->setWindowFlags(this->windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
+    QDesktopWidget* d=QApplication::desktop();
+    int w = d->width();
+    int h = d->height();
+    this->setGeometry(w*0.1,h*0.05,w*0.8,h*0.93);
+    // this->showMaximized();
 
+    window_initial();
     // Setup the cloud pointer
     cloud.reset (new PointCloudT);
     // The number of points in the cloud
@@ -39,12 +46,9 @@ MainWindow::MainWindow(QWidget *parent) :
     viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
     ui->qvtkWidget->SetRenderWindow (viewer->getRenderWindow ());
     viewer->setupInteractor (ui->qvtkWidget->GetInteractor (), ui->qvtkWidget->GetRenderWindow ());
-    ui->qvtkWidget->update ();
+    ui->qvtkWidget->update();
 
     connect (ui->readdataButton, SIGNAL (clicked()), this, SLOT (getfile()));
-    connect (ui->toolButton, SIGNAL (clicked()), this, SLOT (toolButton_clicked ()));
-    connect (ui->comboBox, SIGNAL (currentIndexChanged(QString)), this, SLOT (getallpcdlist ()));
-
    
     viewer->setCameraPosition(0,0,500,0,0,1,0.0,0.1,-200);
 
@@ -57,87 +61,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::fileselect_clicked()
+void MainWindow::window_initial()
 {
-   QString filename = QFileDialog::getOpenFileName(this,tr("open file"), "/home/liuxinxin/ToolKit/Data_Lidar" ,tr("PCDfile(*.pcd)"));
-
-    cout<<filename.toStdString()<<endl;
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr readcloud (new pcl::PointCloud<pcl::PointXYZ>);
-//    if (pcl::io::loadPCDFile<pcl::PointXYZ> (filename.toStdString(), *readcloud) == -1) //* load the file
-//    {
-//        PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
-//    }
-//    else
-//    {
-//        long pointsize = readcloud->width * readcloud->height;
-//        cout<<readcloud->points.size()<<endl;
-//        std::cout << "Loaded "
-//                  << pointsize
-//                  << " data points from test_pcd.pcd. "
-//                  << std::endl;
-//     viewer->updatePointCloud (readcloud, "cloud");
-    
-//     viewer->resetCamera ();
-//     ui->qvtkWidget->update ();
-//     ui->pcsizelineEdit->setText(QString::fromStdString(to_string(pointsize)) );
-
-//    }
+    int wwidth = this->width();
+    int wheight = this->height();
+    ui->pcsizelabel_2->setGeometry(0,wheight*0.01,wwidth*0.15,wheight*0.05);
+    ui->textEdit->setGeometry(wwidth*0.15,wheight*0.01,wwidth*0.7,wheight*0.05);
+    ui->readdataButton->setGeometry(wwidth*0.855,wheight*0.01,wwidth*0.135,wheight*0.05);
+    ui->qvtkWidget->setGeometry(wwidth*0.01,wheight*0.06,wwidth*0.98,wheight*0.92);
 }
 
-void MainWindow::toolButton_clicked()
+void MainWindow::changeEvent(QEvent *event)
 {
-    choosed_directory = QDir::toNativeSeparators(QFileDialog::getExistingDirectory(this,tr("data directory"),"/home/liuxinxin/ToolKit/Data_Lidar"));
-    QDir dir(choosed_directory);
-    dir.setFilter(QDir::Dirs);
-    filelist = dir.entryInfoList();
-    for (int i = 2; i < filelist.size(); ++i)
-    {
-    QFileInfo fileInfo = filelist.at(i);
-    if(ui->comboBox->findText(fileInfo.fileName())==-1)
-    ui->comboBox->addItem(fileInfo.fileName());
-    ui->comboBox->setCurrentIndex(ui->comboBox->findText(fileInfo.fileName()));
-    }
-
-}
-QStringList MainWindow::getallpcdlist()
-{
-    QString targetdirector = ui->comboBox->currentText();
-
-    QDir dir(choosed_directory+"/"+targetdirector);
-    dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-    dir.setSorting(QDir::Size | QDir::Reversed);
-    QFileInfoList list = dir.entryInfoList();
-    QStringList localpcdfilelist;
-    for (int i = 0; i < list.size(); ++i)
-    {
-    QFileInfo fileInfo = list.at(i);
-    // qDebug() << qPrintable(QString("%1 %2").arg(fileInfo.size(), 10)
-                                                    // .arg(fileInfo.fileName()));
-
-    QString filepath;
-    filepath.append(fileInfo.path());
-    filepath+="/"+fileInfo.fileName();
-    QString formattail =  filepath.mid(filepath.size()-4,-1);
-    if(formattail == ".pcd")
-    {
-        localpcdfilelist.append(filepath); 
-    }
-    }
-    return localpcdfilelist;
+    this->window_initial();
 }
 
 void MainWindow::getfile()
 {
-    
-    clock_t start,finish;
-    double totaltime;
-    start=clock();
-    for(size_t i=0;i<410;i++) test();
-    finish=clock();
-    totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
-    cout<<"\n此程序的运行时间为"<<totaltime<<"秒！"<<endl;
 
-    //     ui->pcsizelineEdit->setText(QString::number(fileindex+1));
+    test();
+
 }
 
 
@@ -155,7 +98,15 @@ void MainWindow::test()
     viewer->removeAllPointClouds();
     viewer->removeAllShapes();
     
+    clock_t start,finish;
+    double totaltime;
+    start=clock();
     add_cloud(cloud,true);
+    finish=clock();
+    totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+    cout<<"\n此程序的运行时间为"<<totaltime<<"秒！"<<endl;
+
+    
     
     PointT spherecenter;
     spherecenter.x=0;
@@ -290,7 +241,7 @@ long *MainWindow::circle_sample(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
 {
     // cout<<"cloud point num ="<<cloud->points.size ()<<endl;
     float angle_resolution=1;
-    int angle_num=(int)(360/angle_resolution);
+    unsigned int angle_num=(int)(360/angle_resolution);
     long *circle_indice=new long[angle_num];
     long circle_indice_distance[angle_num];
     for (size_t i = 0; i < angle_num; i++)

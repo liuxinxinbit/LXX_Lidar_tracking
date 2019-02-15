@@ -72,15 +72,15 @@ protected:
 	PointCloudT::Ptr cloud;
 	PointT center;
 	PointT center2end;
+	void changeEvent(QEvent * event);
 private:
 	Ui::MainWindow *ui;
 	
 private slots:
 
-    void fileselect_clicked();
-	void toolButton_clicked();
+
 	void getfile();
-	QStringList getallpcdlist();
+	void window_initial();
 
 	vector<float>  Rectangular2SphericalCoordinateSystem(float x,float y,float z);
 	vector<float>  Spherical2RectangularCoordinateSystem(float radius,float theta,float phi);

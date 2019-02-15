@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>目标识别跟踪测试</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -54,10 +54,10 @@
    <widget class="QPushButton" name="readdataButton">
     <property name="geometry">
      <rect>
-      <x>940</x>
+      <x>1020</x>
       <y>0</y>
-      <width>111</width>
-      <height>33</height>
+      <width>101</width>
+      <height>79</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -67,84 +67,37 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>读取PCD数据</string>
+     <string>测试</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="pcsizelineEdit">
+   <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>10</y>
-      <width>146</width>
-      <height>27</height>
+      <x>181</x>
+      <y>0</y>
+      <width>831</width>
+      <height>79</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string>75</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
    </widget>
-   <widget class="QLabel" name="pcsizelabel">
+   <widget class="QLabel" name="pcsizelabel_2">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>10</y>
-      <width>141</width>
-      <height>37</height>
+      <x>0</x>
+      <y>0</y>
+      <width>181</width>
+      <height>79</height>
      </rect>
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>数据路径</string>
+     <string>点云文件路径</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>561</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5,1">
-     <item>
-      <widget class="QLabel" name="pcsizelabel_2">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>存储路径</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBox"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="toolButton">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -156,7 +109,7 @@
      <x>0</x>
      <y>0</y>
      <width>1157</width>
-     <height>31</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

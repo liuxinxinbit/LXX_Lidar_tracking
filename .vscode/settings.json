@@ -1,3 +1,13 @@
 {
-    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "files.associations": {
+        "vector": "cpp",
+        "complex": "cpp",
+        "cmath": "cpp",
+        "bitset": "cpp",
+        "sstream": "cpp",
+        "iosfwd": "cpp",
+        "deque": "cpp"
+    },
+    "C_Cpp.configurationWarnings": "Disabled"
 }
